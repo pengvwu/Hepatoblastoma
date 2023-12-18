@@ -1,0 +1,788 @@
+---
+title: "Hepatoblastoma - Seurat"
+author: Peng Wu
+output: github_document
+---
+
+```{r}
+install.packages('devtools')
+install.packages('Seurat')
+library(Seurat)
+library(dplyr)
+library(patchwork)
+library(ggplot2)
+```
+
+```{r}
+#Loading matrices from cellranger output
+library(Matrix)
+matrix_dir = "/Users/pengwu/Documents/Research - Old/scRNAseq/HB1-Jan2019/filtered_feature_bc_matrix/"
+barcode.path <- paste0(matrix_dir, "HB1_barcodes.tsv.gz")
+features.path <- paste0(matrix_dir, "HB1_features.tsv.gz")
+matrix.path <- paste0(matrix_dir, "HB1_matrix.mtx.gz")
+mat <- readMM(file = matrix.path)
+feature.names = read.delim(features.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+barcode.names = read.delim(barcode.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+colnames(mat) = barcode.names$V1
+rownames(mat) = make.unique(feature.names$V2)
+```
+
+```{r}
+# Initialize the Seurat object with the raw (non-normalized data).  Keep all
+# genes expressed in >= 3 cells (~0.1% of the data). Keep all cells with at
+# least 200 detected genes
+HB1 <- CreateSeuratObject(counts = mat, min.cells = 3, min.features = 200, project = "HB1")
+HB1
+```
+
+```{r}
+#Loading matrices from cellranger output
+library(Matrix)
+matrix_dir = "/Users/pengwu/Documents/Research - Old/scRNAseq/HB4-Oct2020/outs/filtered_feature_bc_matrix/"
+barcode.path <- paste0(matrix_dir, "HB4_barcodes.tsv.gz")
+features.path <- paste0(matrix_dir, "HB4_features.tsv.gz")
+matrix.path <- paste0(matrix_dir, "HB4_matrix.mtx.gz")
+mat <- readMM(file = matrix.path)
+feature.names = read.delim(features.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+barcode.names = read.delim(barcode.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+colnames(mat) = barcode.names$V1
+rownames(mat) = make.unique(feature.names$V2)
+```
+
+```{r}
+# Initialize the Seurat object with the raw (non-normalized data).  Keep all
+# genes expressed in >= 3 cells (~0.1% of the data). Keep all cells with at
+# least 200 detected genes
+HB4 <- CreateSeuratObject(counts = mat, min.cells = 3, min.features = 200, project = "HB4")
+HB4
+```
+
+```{r}
+matrix_dir = "/Users/pengwu/Documents/Research - Old/scRNAseq/HB6-Oct2020/outs/filtered_feature_bc_matrix/"
+barcode.path <- paste0(matrix_dir, "HB6_barcodes.tsv.gz")
+features.path <- paste0(matrix_dir, "HB6_features.tsv.gz")
+matrix.path <- paste0(matrix_dir, "HB6_matrix.mtx.gz")
+mat <- readMM(file = matrix.path)
+feature.names = read.delim(features.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+barcode.names = read.delim(barcode.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+colnames(mat) = barcode.names$V1
+rownames(mat) = make.unique(feature.names$V2)
+```
+
+```{r}
+# Initialize the Seurat object with the raw (non-normalized data).  Keep all
+# genes expressed in >= 3 cells (~0.1% of the data). Keep all cells with at
+# least 200 detected genes
+HB6 <- CreateSeuratObject(counts = mat, min.cells = 3, min.features = 200, project = "HB6")
+HB6
+```
+
+```{r}
+matrix_dir = "/Users/pengwu/Documents/Research - Old/scRNAseq/HB7-Oct2020/outs/filtered_feature_bc_matrix/"
+barcode.path <- paste0(matrix_dir, "HB7_barcodes.tsv.gz")
+features.path <- paste0(matrix_dir, "HB7_features.tsv.gz")
+matrix.path <- paste0(matrix_dir, "HB7_matrix.mtx.gz")
+mat <- readMM(file = matrix.path)
+feature.names = read.delim(features.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+barcode.names = read.delim(barcode.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+colnames(mat) = barcode.names$V1
+rownames(mat) = make.unique(feature.names$V2)
+```
+
+```{r}
+# Initialize the Seurat object with the raw (non-normalized data).  Keep all
+# genes expressed in >= 3 cells (~0.1% of the data). Keep all cells with at
+# least 200 detected genes
+HB7 <- CreateSeuratObject(counts = mat, min.cells = 3, min.features = 200, project = "HB7")
+HB7
+```
+
+```{r}
+matrix_dir = "/Users/pengwu/Documents/Research - Old/scRNAseq/HB12-Jul2021/outs/"
+barcode.path <- paste0(matrix_dir, "HB12_barcodes.tsv.gz")
+features.path <- paste0(matrix_dir, "HB12_features.tsv.gz")
+matrix.path <- paste0(matrix_dir, "HB12_matrix.mtx.gz")
+mat <- readMM(file = matrix.path)
+feature.names = read.delim(features.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+barcode.names = read.delim(barcode.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+colnames(mat) = barcode.names$V1
+rownames(mat) = make.unique(feature.names$V2)
+```
+
+```{r}
+# Initialize the Seurat object with the raw (non-normalized data).  Keep all
+# genes expressed in >= 3 cells (~0.1% of the data). Keep all cells with at
+# least 200 detected genes
+HB12 <- CreateSeuratObject(counts = mat, min.cells = 3, min.features = 200, project = "HB12")
+HB12
+```
+
+```{r}
+matrix_dir = "/Users/pengwu/Documents/Research - Old/scRNAseq/HB13-Jul2021/outs/"
+barcode.path <- paste0(matrix_dir, "HB13_barcodes.tsv.gz")
+features.path <- paste0(matrix_dir, "HB13_features.tsv.gz")
+matrix.path <- paste0(matrix_dir, "HB13_matrix.mtx.gz")
+mat <- readMM(file = matrix.path)
+feature.names = read.delim(features.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+barcode.names = read.delim(barcode.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+colnames(mat) = barcode.names$V1
+rownames(mat) = make.unique(feature.names$V2)
+```
+
+```{r}
+# Initialize the Seurat object with the raw (non-normalized data).  Keep all
+# genes expressed in >= 3 cells (~0.1% of the data). Keep all cells with at
+# least 200 detected genes
+HB13 <- CreateSeuratObject(counts = mat, min.cells = 3, min.features = 200, project = "HB13")
+HB13
+```
+
+```{r}
+matrix_dir = "/Users/pengwu/Documents/Research - Old/scRNAseq/HB14-Apr2022/"
+barcode.path <- paste0(matrix_dir, "HB14_barcodes.tsv.gz")
+features.path <- paste0(matrix_dir, "HB14_features.tsv.gz")
+matrix.path <- paste0(matrix_dir, "HB14_matrix.mtx.gz")
+mat <- readMM(file = matrix.path)
+feature.names = read.delim(features.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+barcode.names = read.delim(barcode.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+colnames(mat) = barcode.names$V1
+rownames(mat) = make.unique(feature.names$V2)
+```
+
+```{r}
+# Initialize the Seurat object with the raw (non-normalized data).  Keep all
+# genes expressed in >= 3 cells (~0.1% of the data). Keep all cells with at
+# least 200 detected genes
+HB14 <- CreateSeuratObject(counts = mat, min.cells = 3, min.features = 200, project = "HB14")
+HB14
+```
+
+```{r}
+matrix_dir = "/Users/pengwu/Documents/Research - Old/scRNAseq/HB15-2/filtered_feature_bc_matrix/"
+barcode.path <- paste0(matrix_dir, "HB15_barcodes.tsv.gz")
+features.path <- paste0(matrix_dir, "HB15_features.tsv.gz")
+matrix.path <- paste0(matrix_dir, "HB15_matrix.mtx.gz")
+mat <- readMM(file = matrix.path)
+feature.names = read.delim(features.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+barcode.names = read.delim(barcode.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+colnames(mat) = barcode.names$V1
+rownames(mat) = make.unique(feature.names$V2)
+```
+
+```{r}
+# Initialize the Seurat object with the raw (non-normalized data).  Keep all
+# genes expressed in >= 3 cells (~0.1% of the data). Keep all cells with at
+# least 200 detected genes
+HB15 <- CreateSeuratObject(counts = mat, min.cells = 3, min.features = 200, project = "HB15")
+HB15
+```
+
+```{r}
+matrix_dir = "/Users/pengwu/Documents/Research - Old/scRNAseq/HB16/filtered_feature_bc_matrix/"
+barcode.path <- paste0(matrix_dir, "HB16_barcodes.tsv.gz")
+features.path <- paste0(matrix_dir, "HB16_features.tsv.gz")
+matrix.path <- paste0(matrix_dir, "HB16_matrix.mtx.gz")
+mat <- readMM(file = matrix.path)
+feature.names = read.delim(features.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+barcode.names = read.delim(barcode.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+colnames(mat) = barcode.names$V1
+rownames(mat) = make.unique(feature.names$V2)
+```
+
+```{r}
+# Initialize the Seurat object with the raw (non-normalized data).  Keep all
+# genes expressed in >= 3 cells (~0.1% of the data). Keep all cells with at
+# least 200 detected genes
+HB16 <- CreateSeuratObject(counts = mat, min.cells = 3, min.features = 200, project = "HB16")
+HB16
+```
+
+```{r}
+matrix_dir = "/Users/pengwu/Documents/Research - Old/scRNAseq/HB17/filtered_feature_bc_matrix/"
+barcode.path <- paste0(matrix_dir, "HB17_barcodes.tsv.gz")
+features.path <- paste0(matrix_dir, "HB17_features.tsv.gz")
+matrix.path <- paste0(matrix_dir, "HB17_matrix.mtx.gz")
+mat <- readMM(file = matrix.path)
+feature.names = read.delim(features.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+barcode.names = read.delim(barcode.path, 
+                           header = FALSE,
+                           stringsAsFactors = FALSE)
+colnames(mat) = barcode.names$V1
+rownames(mat) = make.unique(feature.names$V2)
+```
+
+```{r}
+# Initialize the Seurat object with the raw (non-normalized data).  Keep all
+# genes expressed in >= 3 cells (~0.1% of the data). Keep all cells with at
+# least 200 detected genes
+HB17 <- CreateSeuratObject(counts = mat, min.cells = 3, min.features = 200, project = "HB16")
+HB17
+```
+
+```{r}
+# The number of genes and UMIs (nGene and nUMI) are automatically calculated
+# for every object by Seurat.  For non-UMI data, nUMI represents the sum of
+# the non-normalized values within a cell We calculate the percentage of
+# mitochondrial genes here and store it in percent.mito using AddMetaData.
+# We use object@raw.data since this represents non-transformed and
+# non-log-normalized counts The % of UMI mapping to MT-genes is a common
+# scRNA-seq QC metric.
+mito.features <- grep(pattern = "^MT-", x = rownames(x = HB1), value = TRUE)
+percent.mito <- Matrix::colSums(x = GetAssayData(object = HB1, slot = 'counts')[mito.features, ]) / Matrix::colSums(x = GetAssayData(object = HB1, slot = 'counts'))
+# The [[ operator can add columns to object metadata, and is a great place to stash QC stats
+HB1[['percent.mito']] <- percent.mito
+```
+
+```{r}
+rb.genes <- rownames(HB1)[grep("^RP[SL]",rownames(HB1))]
+percent.ribo <- Matrix::colSums(x = GetAssayData(object = HB1, slot = 'counts')[rb.genes, ]) / Matrix::colSums(x = GetAssayData(object = HB1, slot = 'counts'))
+HB1[['percent.ribo']] <- percent.ribo
+```
+
+```{r}
+VlnPlot(object = HB1, features = c("nFeature_RNA", "nCount_RNA", "percent.mito", "percent.ribo"), ncol = 4)
+```
+
+```{r}
+# The number of genes and UMIs (nGene and nUMI) are automatically calculated
+# for every object by Seurat.  For non-UMI data, nUMI represents the sum of
+# the non-normalized values within a cell We calculate the percentage of
+# mitochondrial genes here and store it in percent.mito using AddMetaData.
+# We use object@raw.data since this represents non-transformed and
+# non-log-normalized counts The % of UMI mapping to MT-genes is a common
+# scRNA-seq QC metric.
+mito.features <- grep(pattern = "^MT-", x = rownames(x = HB4), value = TRUE)
+percent.mito <- Matrix::colSums(x = GetAssayData(object = HB4, slot = 'counts')[mito.features, ]) / Matrix::colSums(x = GetAssayData(object = HB4, slot = 'counts'))
+# The [[ operator can add columns to object metadata, and is a great place to stash QC stats
+HB4[['percent.mito']] <- percent.mito
+```
+
+```{r}
+rb.genes <- rownames(HB4)[grep("^RP[SL]",rownames(HB4))]
+percent.ribo <- Matrix::colSums(x = GetAssayData(object = HB4, slot = 'counts')[rb.genes, ]) / Matrix::colSums(x = GetAssayData(object = HB4, slot = 'counts'))
+HB4[['percent.ribo']] <- percent.ribo
+VlnPlot(object = HB4, features = c("nFeature_RNA", "nCount_RNA", "percent.mito", "percent.ribo"), ncol = 4)
+```
+
+```{r}
+# The number of genes and UMIs (nGene and nUMI) are automatically calculated
+# for every object by Seurat.  For non-UMI data, nUMI represents the sum of
+# the non-normalized values within a cell We calculate the percentage of
+# mitochondrial genes here and store it in percent.mito using AddMetaData.
+# We use object@raw.data since this represents non-transformed and
+# non-log-normalized counts The % of UMI mapping to MT-genes is a common
+# scRNA-seq QC metric.
+mito.features <- grep(pattern = "^MT-", x = rownames(x = HB6), value = TRUE)
+percent.mito <- Matrix::colSums(x = GetAssayData(object = HB6, slot = 'counts')[mito.features, ]) / Matrix::colSums(x = GetAssayData(object = HB6, slot = 'counts'))
+# The [[ operator can add columns to object metadata, and is a great place to stash QC stats
+HB6[['percent.mito']] <- percent.mito
+```
+
+```{r}
+rb.genes <- rownames(HB6)[grep("^RP[SL]",rownames(HB6))]
+percent.ribo <- Matrix::colSums(x = GetAssayData(object = HB6, slot = 'counts')[rb.genes, ]) / Matrix::colSums(x = GetAssayData(object = HB6, slot = 'counts'))
+HB6[['percent.ribo']] <- percent.ribo
+VlnPlot(object = HB6, features = c("nFeature_RNA", "nCount_RNA", "percent.mito", "percent.ribo"), ncol = 4)
+```
+
+```{r}
+# The number of genes and UMIs (nGene and nUMI) are automatically calculated
+# for every object by Seurat.  For non-UMI data, nUMI represents the sum of
+# the non-normalized values within a cell We calculate the percentage of
+# mitochondrial genes here and store it in percent.mito using AddMetaData.
+# We use object@raw.data since this represents non-transformed and
+# non-log-normalized counts The % of UMI mapping to MT-genes is a common
+# scRNA-seq QC metric.
+mito.features <- grep(pattern = "^MT-", x = rownames(x = HB7), value = TRUE)
+percent.mito <- Matrix::colSums(x = GetAssayData(object = HB7, slot = 'counts')[mito.features, ]) / Matrix::colSums(x = GetAssayData(object = HB7, slot = 'counts'))
+# The [[ operator can add columns to object metadata, and is a great place to stash QC stats
+HB7[['percent.mito']] <- percent.mito
+```
+
+```{r}
+rb.genes <- rownames(HB7)[grep("^RP[SL]",rownames(HB7))]
+percent.ribo <- Matrix::colSums(x = GetAssayData(object = HB7, slot = 'counts')[rb.genes, ]) / Matrix::colSums(x = GetAssayData(object = HB7, slot = 'counts'))
+HB7[['percent.ribo']] <- percent.ribo
+VlnPlot(object = HB7, features = c("nFeature_RNA", "nCount_RNA", "percent.mito", "percent.ribo"), ncol = 4)
+```
+
+```{r}
+# The number of genes and UMIs (nGene and nUMI) are automatically calculated
+# for every object by Seurat.  For non-UMI data, nUMI represents the sum of
+# the non-normalized values within a cell We calculate the percentage of
+# mitochondrial genes here and store it in percent.mito using AddMetaData.
+# We use object@raw.data since this represents non-transformed and
+# non-log-normalized counts The % of UMI mapping to MT-genes is a common
+# scRNA-seq QC metric.
+mito.features <- grep(pattern = "^MT-", x = rownames(x = HB12), value = TRUE)
+percent.mito <- Matrix::colSums(x = GetAssayData(object = HB12, slot = 'counts')[mito.features, ]) / Matrix::colSums(x = GetAssayData(object = HB12, slot = 'counts'))
+# The [[ operator can add columns to object metadata, and is a great place to stash QC stats
+HB12[['percent.mito']] <- percent.mito
+```
+
+```{r}
+rb.genes <- rownames(HB12)[grep("^RP[SL]",rownames(HB12))]
+percent.ribo <- Matrix::colSums(x = GetAssayData(object = HB12, slot = 'counts')[rb.genes, ]) / Matrix::colSums(x = GetAssayData(object = HB12, slot = 'counts'))
+HB12[['percent.ribo']] <- percent.ribo
+VlnPlot(object = HB12, features = c("nFeature_RNA", "nCount_RNA", "percent.mito", "percent.ribo"), ncol = 4)
+```
+
+```{r}
+# The number of genes and UMIs (nGene and nUMI) are automatically calculated
+# for every object by Seurat.  For non-UMI data, nUMI represents the sum of
+# the non-normalized values within a cell We calculate the percentage of
+# mitochondrial genes here and store it in percent.mito using AddMetaData.
+# We use object@raw.data since this represents non-transformed and
+# non-log-normalized counts The % of UMI mapping to MT-genes is a common
+# scRNA-seq QC metric.
+mito.features <- grep(pattern = "^MT-", x = rownames(x = HB13), value = TRUE)
+percent.mito <- Matrix::colSums(x = GetAssayData(object = HB13, slot = 'counts')[mito.features, ]) / Matrix::colSums(x = GetAssayData(object = HB13, slot = 'counts'))
+# The [[ operator can add columns to object metadata, and is a great place to stash QC stats
+HB13[['percent.mito']] <- percent.mito
+```
+
+```{r}
+rb.genes <- rownames(HB13)[grep("^RP[SL]",rownames(HB13))]
+percent.ribo <- Matrix::colSums(x = GetAssayData(object = HB13, slot = 'counts')[rb.genes, ]) / Matrix::colSums(x = GetAssayData(object = HB13, slot = 'counts'))
+HB13[['percent.ribo']] <- percent.ribo
+VlnPlot(object = HB13, features = c("nFeature_RNA", "nCount_RNA", "percent.mito", "percent.ribo"), ncol = 4)
+```
+
+```{r}
+# The number of genes and UMIs (nGene and nUMI) are automatically calculated
+# for every object by Seurat.  For non-UMI data, nUMI represents the sum of
+# the non-normalized values within a cell We calculate the percentage of
+# mitochondrial genes here and store it in percent.mito using AddMetaData.
+# We use object@raw.data since this represents non-transformed and
+# non-log-normalized counts The % of UMI mapping to MT-genes is a common
+# scRNA-seq QC metric.
+mito.features <- grep(pattern = "^MT-", x = rownames(x = HB14), value = TRUE)
+percent.mito <- Matrix::colSums(x = GetAssayData(object = HB14, slot = 'counts')[mito.features, ]) / Matrix::colSums(x = GetAssayData(object = HB14, slot = 'counts'))
+# The [[ operator can add columns to object metadata, and is a great place to stash QC stats
+HB14[['percent.mito']] <- percent.mito
+```
+
+```{r}
+rb.genes <- rownames(HB14)[grep("^RP[SL]",rownames(HB14))]
+percent.ribo <- Matrix::colSums(x = GetAssayData(object = HB14, slot = 'counts')[rb.genes, ]) / Matrix::colSums(x = GetAssayData(object = HB14, slot = 'counts'))
+HB14[['percent.ribo']] <- percent.ribo
+VlnPlot(object = HB14, features = c("nFeature_RNA", "nCount_RNA", "percent.mito", "percent.ribo"), ncol = 4)
+```
+
+```{r}
+# The number of genes and UMIs (nGene and nUMI) are automatically calculated
+# for every object by Seurat.  For non-UMI data, nUMI represents the sum of
+# the non-normalized values within a cell We calculate the percentage of
+# mitochondrial genes here and store it in percent.mito using AddMetaData.
+# We use object@raw.data since this represents non-transformed and
+# non-log-normalized counts The % of UMI mapping to MT-genes is a common
+# scRNA-seq QC metric.
+mito.features <- grep(pattern = "^MT-", x = rownames(x = HB15), value = TRUE)
+percent.mito <- Matrix::colSums(x = GetAssayData(object = HB15, slot = 'counts')[mito.features, ]) / Matrix::colSums(x = GetAssayData(object = HB15, slot = 'counts'))
+# The [[ operator can add columns to object metadata, and is a great place to stash QC stats
+HB15[['percent.mito']] <- percent.mito
+```
+
+```{r}
+rb.genes <- rownames(HB15)[grep("^RP[SL]",rownames(HB15))]
+percent.ribo <- Matrix::colSums(x = GetAssayData(object = HB15, slot = 'counts')[rb.genes, ]) / Matrix::colSums(x = GetAssayData(object = HB15, slot = 'counts'))
+HB15[['percent.ribo']] <- percent.ribo
+VlnPlot(object = HB15, features = c("nFeature_RNA", "nCount_RNA", "percent.mito", "percent.ribo"), ncol = 4)
+```
+
+```{r}
+# The number of genes and UMIs (nGene and nUMI) are automatically calculated
+# for every object by Seurat.  For non-UMI data, nUMI represents the sum of
+# the non-normalized values within a cell We calculate the percentage of
+# mitochondrial genes here and store it in percent.mito using AddMetaData.
+# We use object@raw.data since this represents non-transformed and
+# non-log-normalized counts The % of UMI mapping to MT-genes is a common
+# scRNA-seq QC metric.
+mito.features <- grep(pattern = "^MT-", x = rownames(x = HB16), value = TRUE)
+percent.mito <- Matrix::colSums(x = GetAssayData(object = HB16, slot = 'counts')[mito.features, ]) / Matrix::colSums(x = GetAssayData(object = HB16, slot = 'counts'))
+# The [[ operator can add columns to object metadata, and is a great place to stash QC stats
+HB16[['percent.mito']] <- percent.mito
+```
+
+```{r}
+rb.genes <- rownames(HB16)[grep("^RP[SL]",rownames(HB16))]
+percent.ribo <- Matrix::colSums(x = GetAssayData(object = HB16, slot = 'counts')[rb.genes, ]) / Matrix::colSums(x = GetAssayData(object = HB16, slot = 'counts'))
+HB16[['percent.ribo']] <- percent.ribo
+VlnPlot(object = HB16, features = c("nFeature_RNA", "nCount_RNA", "percent.mito", "percent.ribo"), ncol = 4)
+```
+
+```{r}
+# The number of genes and UMIs (nGene and nUMI) are automatically calculated
+# for every object by Seurat.  For non-UMI data, nUMI represents the sum of
+# the non-normalized values within a cell We calculate the percentage of
+# mitochondrial genes here and store it in percent.mito using AddMetaData.
+# We use object@raw.data since this represents non-transformed and
+# non-log-normalized counts The % of UMI mapping to MT-genes is a common
+# scRNA-seq QC metric.
+mito.features <- grep(pattern = "^MT-", x = rownames(x = HB17), value = TRUE)
+percent.mito <- Matrix::colSums(x = GetAssayData(object = HB17, slot = 'counts')[mito.features, ]) / Matrix::colSums(x = GetAssayData(object = HB17, slot = 'counts'))
+# The [[ operator can add columns to object metadata, and is a great place to stash QC stats
+HB17[['percent.mito']] <- percent.mito
+```
+
+```{r}
+rb.genes <- rownames(HB17)[grep("^RP[SL]",rownames(HB17))]
+percent.ribo <- Matrix::colSums(x = GetAssayData(object = HB17, slot = 'counts')[rb.genes, ]) / Matrix::colSums(x = GetAssayData(object = HB17, slot = 'counts'))
+HB17[['percent.ribo']] <- percent.ribo
+VlnPlot(object = HB17, features = c("nFeature_RNA", "nCount_RNA", "percent.mito", "percent.ribo"), ncol = 4)
+```
+
+```{r}
+# Set up HB1 object
+HB1 <- subset(x = HB1, subset = nFeature_RNA > 200 & nFeature_RNA < 10000 & percent.mito < 0.15)
+
+# Set up HB4 object
+HB4 <- subset(x = HB4, subset = nFeature_RNA > 200 & nFeature_RNA < 10000 & percent.mito < 0.15)
+
+# Set up HB6 object
+HB6 <- subset(x = HB6, subset = nFeature_RNA > 200 & nFeature_RNA < 10000 & percent.mito < 0.15)
+
+# Set up HB7 object
+HB7 <- subset(x = HB7, subset = nFeature_RNA > 200 & nFeature_RNA < 10000 & percent.mito < 0.15)
+
+# Set up HB12 object
+HB12 <- subset(x = HB12, subset = nFeature_RNA > 200 & nFeature_RNA < 10000 & percent.mito < 0.15)
+
+# Set up HB13 object
+HB13 <- subset(x = HB13, subset = nFeature_RNA > 200 & nFeature_RNA < 10000 & percent.mito < 0.15)
+
+# Set up HB14 object
+HB14 <- subset(x = HB14, subset = nFeature_RNA > 200 & nFeature_RNA < 10000 & percent.mito < 0.15)
+
+# Set up HB15 object
+HB15 <- subset(x = HB15, subset = nFeature_RNA > 200 & nFeature_RNA < 10000 & percent.mito < 0.15)
+
+# Set up HB16 object
+HB16 <- subset(x = HB16, subset = nFeature_RNA > 200 & nFeature_RNA < 10000 & percent.mito < 0.15)
+
+# Set up HB17 object
+HB17 <- subset(x = HB17, subset = nFeature_RNA > 200 & nFeature_RNA < 10000 & percent.mito < 0.15)
+```
+
+```{r}
+HB1 <- NormalizeData(HB1)
+HB1 <- FindVariableFeatures(HB1, selection.method = "vst", nfeatures = 2000)
+
+HB4 <- NormalizeData(HB4)
+HB4 <- FindVariableFeatures(HB4, selection.method = "vst", nfeatures = 2000)
+
+HB6 <- NormalizeData(HB6)
+HB6 <- FindVariableFeatures(HB6, selection.method = "vst", nfeatures = 2000)
+
+HB7 <- NormalizeData(HB7)
+HB7 <- FindVariableFeatures(HB7, selection.method = "vst", nfeatures = 2000)
+
+HB12 <- NormalizeData(HB12)
+HB12 <- FindVariableFeatures(HB12, selection.method = "vst", nfeatures = 2000)
+
+HB13 <- NormalizeData(HB13)
+HB13 <- FindVariableFeatures(HB13, selection.method = "vst", nfeatures = 2000)
+
+HB14 <- NormalizeData(HB14)
+HB14 <- FindVariableFeatures(HB14, selection.method = "vst", nfeatures = 2000)
+
+HB15 <- NormalizeData(HB15)
+HB15 <- FindVariableFeatures(HB15, selection.method = "vst", nfeatures = 2000)
+
+HB16 <- NormalizeData(HB16)
+HB16 <- FindVariableFeatures(HB16, selection.method = "vst", nfeatures = 2000)
+
+HB17 <- NormalizeData(HB17)
+HB17 <- FindVariableFeatures(HB17, selection.method = "vst", nfeatures = 2000)
+```
+
+```{r}
+HB1 <- AddMetaData(HB1, metadata="A", col.name="HB")
+HB4 <- AddMetaData(HB4, metadata="B", col.name="HB")
+HB6 <- AddMetaData(HB6, metadata="C", col.name="HB")
+HB7 <- AddMetaData(HB7, metadata="D", col.name="HB")
+HB12 <- AddMetaData(HB12, metadata="E", col.name="HB")
+HB13 <- AddMetaData(HB13, metadata="F", col.name="HB")
+HB14 <- AddMetaData(HB14, metadata="G", col.name="HB")
+HB15 <- AddMetaData(HB15, metadata="H", col.name="HB")
+HB16 <- AddMetaData(HB16, metadata="I", col.name="HB")
+HB17 <- AddMetaData(HB17, metadata="J", col.name="HB")
+```
+
+```{r}
+HBbig.list <- list(HB1, HB4, HB6, HB7, HB12, HB13, HB14, HB15, HB16, HB17) 
+```
+
+```{r}
+features <- SelectIntegrationFeatures(object.list = HBbig.list)
+```
+
+```{r}
+HB.anchors <- FindIntegrationAnchors(object.list = HBbig.list, anchor.features = features)
+```
+
+```{r}
+# this command creates an 'integrated' data assay
+HB.combined <- IntegrateData(anchorset = HB.anchors)
+```
+
+```{r}
+# specify that we will perform downstream analysis on the corrected data note that the original
+# unmodified data still resides in the 'RNA' assay
+DefaultAssay(HB.combined) <- "integrated"
+
+# Run the standard workflow for visualization and clustering
+HB.combined <- ScaleData(HB.combined, vars.to.regress = c("nCount_RNA", "percent.mito", "percent.ribo"), verbose = FALSE)
+```
+
+```{r}
+HB.combined <- RunPCA(HB.combined, verbose = FALSE)
+```
+
+```{r}
+HB.combined <- RunUMAP(HB.combined, reduction = "pca", dims = 1:30, set.seed(123))
+HB.combined <- FindNeighbors(HB.combined, reduction = "pca", dims = 1:30)
+HB.combined <- FindClusters(HB.combined, resolution = 0.4)
+```
+
+```{r}
+# Visualization
+DimPlot(HB.combined, reduction = "umap", label = TRUE, repel = TRUE)
+```
+
+```{r}
+DimPlot(HB.combined, reduction = "umap", split.by = "HB", ncol = 4)
+```
+
+```{r}
+# How do I create a UMAP plot where cells are colored by replicate?  First, store the current
+# identities in a new column of meta.data called CellType
+HB.combined$CellType <- Idents(HB.combined)
+# Next, switch the identity class of all cells to reflect replicate ID
+Idents(HB.combined) <- "seurat_clusters"
+DimPlot(HB.combined, reduction = "umap", label = TRUE)
+```
+
+```{r}
+p2 <- DimPlot(HB.combined, reduction = "umap", label = TRUE, repel = TRUE)
+p2
+```
+
+```{r}
+saveRDS(HB.combined, file = "/Users/pengwu/Documents/Experiments/scRNAseq/HBcombined.rds")
+```
+
+```{r}
+DimPlot(object = HB.combined, reduction = 'umap', split.by = "HB", width = 2000, height = 1500, units = "px", res = 300)
+tiff(file = "/Volumes/backups/Peng/Research/scRNAseq/HBcombined.tiff", width = 2000, height = 1500, units = "px", res = 300)
+dev.off()
+```
+
+```{r}
+# For performing differential expression after integration, we switch back to the original data
+DefaultAssay(HB.combined) <- "RNA"
+AllClust.markers <- FindAllMarkers(HB.combined, grouping.var = "HB", verbose = FALSE)
+write.csv(AllClust.markers,"/Users/pengwu/Documents/Experiments/scRNAseq/allclusters.csv",row.names = TRUE)
+```
+
+```{r}
+cluster0.markers <- FindConservedMarkers(HB.combined, ident.1 = 0, grouping.var = "HB", verbose = FALSE)
+write.csv(cluster0.markers,"/Users/pengwu/Documents/Experiments/scRNAseq/cluster0.csv",row.names = TRUE)
+```
+
+```{r}
+cluster1.markers <- FindConservedMarkers(HB.combined, ident.1 = 1, grouping.var = "HB", verbose = FALSE)
+write.csv(cluster1.markers,"/Users/pengwu/Documents/Experiments/scRNAseq/cluster1.csv",row.names = TRUE)
+```
+
+```{r}
+cluster2.markers <- FindConservedMarkers(HB.combined, ident.1 = 2, grouping.var = "HB", verbose = FALSE)
+write.csv(cluster2.markers,"/Users/pengwu/Documents/Experiments/scRNAseq/cluster2.csv",row.names = TRUE)
+```
+
+```{r}
+cluster3.markers <- FindConservedMarkers(HB.combined, ident.1 = 3, grouping.var = "HB", verbose = FALSE)
+write.csv(cluster3.markers,"/Users/pengwu/Documents/Experiments/scRNAseq/cluster3.csv",row.names = TRUE)
+```
+
+```{r}
+cluster4.markers <- FindConservedMarkers(HB.combined, ident.1 = 4, grouping.var = "HB", verbose = FALSE)
+write.csv(cluster4.markers,"/Users/pengwu/Documents/Experiments/scRNAseq/cluster4.csv",row.names = TRUE)
+```
+
+```{r}
+cluster5.markers <- FindConservedMarkers(HB.combined, ident.1 = 5, grouping.var = "HB", verbose = FALSE)
+write.csv(cluster5.markers,"/Users/pengwu/Documents/Experiments/scRNAseq/cluster5.csv",row.names = TRUE)
+```
+
+```{r}
+cluster6.markers <- FindConservedMarkers(HB.combined, ident.1 = 6, grouping.var = "HB", verbose = FALSE)
+write.csv(cluster6.markers,"/Users/pengwu/Documents/Experiments/scRNAseq/cluster6.csv",row.names = TRUE)
+```
+
+```{r}
+cluster7.markers <- FindConservedMarkers(HB.combined, ident.1 =7, grouping.var = "HB", verbose = FALSE)
+write.csv(cluster7.markers,"/Users/pengwu/Documents/Experiments/scRNAseq/cluster7.csv",row.names = TRUE)
+```
+
+```{r}
+cluster8.markers <- FindConservedMarkers(HB.combined, ident.1 =8, grouping.var = "HB", verbose = FALSE)
+write.csv(cluster8.markers,"/Users/pengwu/Documents/Experiments/scRNAseq/cluster8.csv",row.names = TRUE)
+```
+
+```{r}
+cluster9.markers <- FindConservedMarkers(HB.combined, ident.1 =9, grouping.var = "HB", verbose = FALSE)
+write.csv(cluster9.markers,"/Users/pengwu/Documents/Experiments/scRNAseq/cluster9.csv",row.names = TRUE)
+```
+
+```{r}
+cluster10.markers <- FindConservedMarkers(HB.combined, ident.1 = 10, grouping.var = "HB", verbose = FALSE)
+write.csv(cluster10.markers,"/Users/pengwu/Documents/Experiments/scRNAseq/cluster10.csv",row.names = TRUE)
+```
+
+```{r}
+cluster11.markers <- FindConservedMarkers(HB.combined, ident.1 = 11, grouping.var = "HB", verbose = FALSE)
+write.csv(cluster11.markers,"/Users/pengwu/Documents/Experiments/scRNAseq/cluster11.csv",row.names = TRUE)
+```
+
+```{r}
+# Example for plotting gene features
+FeaturePlot(object = HB.combined, features = c("FGF19", "KLB", "FGFR4"))
+tiff(file = "FGF.tiff", width = 1500, height = 1500, units = "px", res = 300)
+dev.off()
+```
+
+```{r}
+# Example for calculating gene signatures
+FetvNorm <- read.csv('/Users/pengwu/Documents/Experiments/RNAseq/180805Final/FetvNorm_Top50.csv', header=F, sep=",")
+FetvNorm <- as.matrix(FetvNorm)
+HB.combined <- AddModuleScore(HB.combined,
+                  features = list(FetvNorm),
+                  name="FetvNorm")
+```
+
+```{r}
+# Plot scores
+FeaturePlot(HB.combined,
+            features = c("FetvNorm1"), label = FALSE, repel = TRUE) +
+            scale_colour_gradientn(colours = rev(brewer.pal(n = 11, name = "RdBu")))
+```
+
+```{r}
+# Example for violin plots
+my_genes <- HB.combined[row.names(subset(fData(HB.combined), gene_short_name %in% c("AFP", "HNF4A", "KRT19", "SOX4"))),]
+
+tiff(file = "AFPGenes_Violin.tiff", width = 1500, height = 1500, units = "px", res = 300)
+p <- plot_genes_violin(my_genes, grouping = "cluster", ncol=2, min_expr=0.1,
+  color_by = "cluster")
+p + geom_jitter(shape=16, position=position_jitter(0.2))
+dev.off()
+```
+
+```{r}
+# Dot plots - the size of the dot corresponds to the percentage of cells expressing the
+# feature in each cluster. The color represents the average expression level
+features.plot <- c("FGF1", "FGF2", "FGF3", "FGF4", "FGF7", "FGF8", "FGF9", "FGF10", "FGF11", "FGF12", "FGF13", "FGF14", "FGF17", "FGF18", "FGF19", "FGF20", "FGF21", "FGF22", "FGF23")
+DotPlot(HB.combined, features = features.plot, group.by = "HB") + RotatedAxis()
+```
+
+```{r}
+# Dot plots - the size of the dot corresponds to the percentage of cells expressing the
+# feature in each cluster. The color represents the average expression level
+features.plot <- c("FGFR1", "FGFR2", "FGFR3", "FGFR4", "KLB", "EGFR", "MET", "IGF1R", "IGF2R", "INSR", "EGF", "HGF", "IGF1", "IGF2.1")
+DotPlot(HB.combined, features = features.plot, group.by = "HB") + RotatedAxis()
+```
+
+```{r}
+umapCoord <- as.data.frame(Embeddings(object = HB.combined[["umap"]]))
+umapCoordmat <- as.matrix(umapCoord)
+```
+
+```{r}
+# Monocle for pseudotime analyses
+remotes::install_github('satijalab/seurat-wrappers')
+library(monocle3)
+library(Seurat)
+library(SeuratWrappers)
+library(patchwork)
+library(dplyr)
+
+set.seed(1234)
+```
+
+```{r}
+HB.monocle <- as.cell_data_set(HB.combined)
+HB.monocle <- cluster_cells(HB.monocle, cluster_method = "louvain")
+
+p1 <- plot_cells(HB.monocle, color_cells_by = "cluster", show_trajectory_graph = FALSE)
+p2 <- plot_cells(HB.monocle, color_cells_by = "partition", show_trajectory_graph = FALSE)
+wrap_plots(p1, p2)
+```
+
+```{r}
+integrated.sub <- subset(as.Seurat(HB.monocle, assay = NULL), monocle3_partitions == 1)
+HB.monocle <- as.cell_data_set(integrated.sub)
+```
+
+```{r}
+HB.monocle <- learn_graph(HB.monocle, use_partition = TRUE, verbose = FALSE)
+```
+
+```{r}
+plot_cells(HB.monocle,
+           color_cells_by = "cluster",
+           label_groups_by_cluster=FALSE,
+           label_leaves=FALSE,
+           label_branch_points=FALSE)
+```
+
+```{r}
+HB.monocle <- order_cells(HB.monocle, root_cells = colnames(HB.monocle[,clusters(HB.monocle) == 47]))
+plot_cells(HB.monocle,
+           color_cells_by = "pseudotime",
+           group_cells_by = "cluster",
+           label_cell_groups = FALSE,
+           label_groups_by_cluster=FALSE,
+           label_leaves=FALSE,
+           label_branch_points=FALSE,
+           label_roots = FALSE,
+           trajectory_graph_color = "grey60")
+```
