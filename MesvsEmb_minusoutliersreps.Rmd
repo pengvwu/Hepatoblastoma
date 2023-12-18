@@ -1,0 +1,67 @@
+---
+title: "DESeq2 - Mesenchymal vs Embryonal"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+HOW TO GET FOLD CHANGE DATA USING DESeq2
+
+Load the libraries:
+
+```{r}
+library(DESeq2)
+library(readr)
+```
+
+Convert the .csv files to matrices within R
+
+1) "countdata" (hb1): Read counts, [m x n] with m = samples, n = genes
+2) "coldata" (colname): Sample assigments, [l x m] with l = variables (eg. patient, histology, treatment)
+
+Set up the colname matrix 
+
+```{r}
+setwd ("/Users/pengwu/Documents/Research - Old/RNASeqData/180805")
+hb1 <- read_csv("180805_countdata_minusoutliers.csv")
+hb1_colnames <- read_csv("180805_colnames_minusoutliers.csv")
+data.frame (hb1_colnames)
+colname = data.frame (hb1_colnames)
+```
+
+Define the experimental design
+
+```{r}
+dds <- DESeqDataSetFromMatrix(countData = hb1,
+                              colData = colname,
+                              design = ~ Type)
+
+#Collapse 'technical' replicates
+ddsCollapsed <- collapseReplicates( dds,
+                                    groupby = dds$Sample)
+
+# Running the pipeline to obtain log2 fold change for mes/emb:
+
+dds <- DESeq(ddsCollapsed)
+res <- results( dds, contrast = c("Type", "Mesenchymal", "Embryonal") )
+res
+```
+
+Convert to csv file (with genes numbered rather than gene names), where gene names can be added back from the original read.csv file:
+
+```{r}
+setwd ("/Users/pengwu/Documents/Experiments/RNASeq/180805Final")
+write.csv(as.data.frame(res),
+          file="MesvEmb_All_minusoutliersreps_Type.csv")
+```
+
+
+Plotting the histogram of p-values:
+
+```{r}
+hist( res$pvalue, breaks=20, col="grey" )
+```
+
+```{r}
+hist( res$padj, breaks=20, col="grey" )
+```
